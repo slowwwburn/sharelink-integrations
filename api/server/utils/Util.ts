@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import crypto from "crypto";
@@ -76,47 +75,25 @@ class Util {
 		return res.status(this.statusCode).json(result);
 		// }
 
-		if (this.download === "true") {
-			return res.download(
-				`${this.file}.csv`,
-				`${this.file}.csv`,
-				(err: any) => {
-					if (err) {
-						res.status(500).send("error");
-					} else {
-						console.log("file was downloaded");
-					}
-				}
-			);
-		}
+		// if (this.download === "true") {
+		// 	return res.download(
+		// 		`${this.file}.csv`,
+		// 		`${this.file}.csv`,
+		// 		(err: any) => {
+		// 			if (err) {
+		// 				res.status(500).send("error");
+		// 			} else {
+		// 				console.log("file was downloaded");
+		// 			}
+		// 		}
+		// 	);
+		// }
 
 		// return res.status(this.statusCode).json({
 		// 	status: this.type,
 		// 	message: this.message,
 		// 	errorCode: this.errorCode,
 		// });
-	}
-
-	hashPassword(password: string): string {
-		log("Salting password");
-		try {
-			return bcrypt.hashSync(password, saltRounds);
-		} catch (err: any) {
-			throw err;
-		}
-	}
-
-	comparePassword(password: string, passwordHash: string): boolean {
-		log("Comparing password");
-		try {
-			if (password === passwordHash) {
-				return true;
-			}
-			const result = bcrypt.compareSync(password || "", passwordHash);
-			return result;
-		} catch (err) {
-			throw err;
-		}
 	}
 
 	compareSignature(body: string, signature: string | null) {
