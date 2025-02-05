@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import createLogger from "../utils/Logger";
 import Util from "../utils/Util";
 import PaystackService from "../services/PaystackService";
-import { io, userSocketMap } from "../../app";
 
 const log = createLogger(__filename);
 const util = new Util();
@@ -114,15 +113,15 @@ class PaystackController {
 					event
 				);
 
-				const userSocketId = userSocketMap.get(validation.userId); // Get socket ID for the user
-				if (userSocketId) {
-					log(userSocketId);
-					io.to(userSocketId).emit("walletUpdate", {
-						status: true,
-					});
-				} else {
-					console.log(`User ${validation.userId} is not connected`);
-				}
+				// const userSocketId = userSocketMap.get(validation.userId); // Get socket ID for the user
+				// if (userSocketId) {
+				// 	log(userSocketId);
+				// 	io.to(userSocketId).emit("walletUpdate", {
+				// 		status: true,
+				// 	});
+				// } else {
+				// 	console.log(`User ${validation.userId} is not connected`);
+				// }
 
 				validation
 					? util.setSuccess(200, "00", "Ok")

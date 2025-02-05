@@ -80,56 +80,6 @@ const server = app.listen(port, () => {
 	log(`Integration server is running on PORT ${port}`);
 });
 
-// Initialize socket.io after the server starts
-const io = new Server(server, {
-	cors: {
-		origin: "*", // Change this as needed
-	},
-});
-
-// Add authentication middleware for Socket.IO
-io.use(async (socket, next) => {
-	try {
-		const token = socket.handshake.auth.token;
-		if (!token) {
-			return next(new Error("Authentication token is required"));
-		}
-
-		const { id } = await AuthService.validateUser(token);
-		(socket as any).userId = id; // Attach userId to the socket object
-		next();
-	} catch (error: any) {
-		log("Authentication error:", error.message);
-		next(new Error("Authentication failed"));
-	}
-});
-
-const userSocketMap = new Map<string, string>();
-// Handle Socket.IO connections
-io.on("connection", (socket) => {
-	const userId = (socket as any).userId; // Retrieve the authenticated userId
-	console.log(`User connected: ${userId}`);
-
-	if (userId) {
-		userSocketMap.set(userId, socket.id);
-		console.log(`User ${userId} connected with socket ID ${socket.id}`);
-	}
-
-	// Emit a welcome message
-	socket.emit("welcome", `Welcome, user ${userId}!`);
-
-	// Handle custom events here
-	socket.on("walletFunded", (data) => {
-		console.log(`Received data from user ${userId}:`, data);
-	});
-
-	// Handle disconnection
-	socket.on("disconnect", () => {
-		userSocketMap.delete(userId);
-		console.log(`User ${userId} disconnected`);
-	});
-});
-
 function cleanupAndExit() {
 	const closeServer = new Promise<void>((resolve, reject) => {
 		server.close((err) => {
@@ -156,7 +106,5 @@ function cleanupAndExit() {
 
 process.once("SIGTERM", cleanupAndExit);
 process.once("SIGINT", cleanupAndExit);
-
-export { io, userSocketMap };
 
 export default app;
