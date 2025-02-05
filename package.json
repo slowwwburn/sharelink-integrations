@@ -3,9 +3,9 @@
 	"version": "1.0.0",
 	"main": "app.ts",
 	"scripts": {
-		"dev1": "DEBUG=app:* npx nodemon --watch 'src/**/*.ts' --exec 'node --inspect=9229 -r ts-node/register' ./api/app.ts",
 		"dev": "DEBUG=app:* npx nodemon --clear --watch 'src/**/*.ts' --exec ts-node-dev ./api/app.ts",
-		"start": "node dist/index.js",
+		"prestart": "npm run build",
+		"start": "DEBUG=app:* node dist/app.js",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "tsc"
 	},
