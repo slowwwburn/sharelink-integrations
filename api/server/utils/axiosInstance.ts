@@ -11,15 +11,11 @@ const interswitch2Axios = axios.create({});
 const walletAxios = axios.create({});
 const authAxios = axios.create({});
 
-let prembly_sk: string | undefined, prembly_app_id: string | undefined;
+// let prembly_sk: string | undefined, prembly_app_id: string | undefined;
 
-if (process.env.NODE_ENV === "development") {
-	prembly_sk = process.env.prembly_DEV_SECRET;
-	prembly_app_id = process.env.prembly_DEV_APP_ID;
-} else if (process.env.NODE_ENV === "production") {
-	prembly_sk = process.env.prembly_SECRET;
-	prembly_app_id = process.env.prembly_APP_ID;
-}
+const prembly_sk = process.env.prembly_SECRET;
+const prembly_app_id = process.env.prembly_APP_ID;
+
 // Interceptor for the first axios instance
 premblyAxios.interceptors.request.use(
 	(config: any) => {
